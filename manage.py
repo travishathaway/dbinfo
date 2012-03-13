@@ -1,4 +1,4 @@
-#! /home/thath/thathVirt/bin/python
+#! /usr/bin/env python 
 
 
 import queries,commands

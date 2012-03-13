@@ -1,15 +1,15 @@
-import traviSQL, subprocess, random, string,sys
+import subprocess, random, string,sys
 from MySQLdb.cursors import DictCursor
 from MySQLdb import connect
 
 try:
-    import settings
+    from local_settings import *
 except ImportError, e:
     print "could not find settings file. Exiting..."
     sys.exit(0)
 
 
-def getcon(config=settings.config):
+def getcon(config=CONFIG):
     '''
     Function that reads the settings file and establishes database connection
     '''
