@@ -11,3 +11,4 @@ CONFIG = {
     'host' :    '',
 }
 
+DB_BACKUP_DIR = ''

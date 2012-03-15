@@ -102,11 +102,6 @@ class DisableDb(argparse.Action):
             else: 
                 print "database "+database+" not found"
 
-parser = argparse.ArgumentParser(description='Disable MySQL user accounts by resetting the password.')
-parser.add_argument('--user', '-u', nargs="+",type=str, help="One or more MySQL user accounts to disable.")
-parser.add_argument('--database', '-d', nargs="+",type=str, help="One or more MySQL databases to drop. These databases will backed up to the ARC back dir.")
-
-
 def add_args():
 
     parser = argparse.ArgumentParser(description='This is a utility tool for MySQL. It can generate reports as well as perform specific actions on the server.')
