@@ -1,7 +1,7 @@
-import argparse,random,string
+import argparse,random,string,sys,subprocess
 from queries import (Queries,getcon)
 
-from local_settings import DB_BACKUP_DIR
+from local_settings import *
 
 class DisableUser(argparse.Action):
     '''
@@ -33,7 +33,7 @@ class DisableUser(argparse.Action):
             if user_data:
                 for row in user_data:
                     answer = raw_input("Are you sure you want to disable " +user+"@"+row.get('host')+" account(Y/n)? ")
-                    if answer in ['y','']:
+                    if answer.lower() in ['y','']:
                         password = self.gen_password()
                         self.cursor.execute("SET PASSWORD FOR '"+row.get('user')+"'@'"+row.get('host')+ "' = PASSWORD('"+password+"')")
                         print "User "+user+"@"+row.get('host')+" password has been reset"
@@ -77,7 +77,11 @@ class DisableDb(argparse.Action):
         '''
         Function that backs up a mysql database (wrapper around `mysqldump`)
         '''
-        args = ['mysqldump',database,'--user='+traviSQL.dbuser,'--host='+self.dbhost,'-p'+traviSQL.dbpass]
+        try:
+            args = ['mysqldump',database,'--user='+CONFIG['user'],'--host='+CONFIG['host'],'-p'+CONFIG['pass']]
+        except KeyError:
+            print "One or more settings were not in settings file. exiting..."
+            sys.exit(1)
         backup_sql = open(backup_dir+'/'+database+'.sql', 'w')
         return subprocess.call(args,stdout=backup_sql)
 
@@ -89,10 +93,9 @@ class DisableDb(argparse.Action):
         for database in databases:
             self.cursor.execute('SHOW DATABASES LIKE %s', database)
             if self.cursor.fetchall():
-                answer = raw_input("(a backup will be created in "+DB_BACKUP_DIR+")\n \
-                                    Are you sure you want to drop "+database+"(Y/n)?")
-                if answer in ['y','']:
-                    print "Creating backup at "+self.backup_dir+"/"+database+".sql"
+                answer = raw_input("(a backup will be created in "+DB_BACKUP_DIR+")\nAre you sure you want to drop "+database+"(Y/n)?")
+                if answer.lower() in ['y','']:
+                    print "Creating backup at "+DB_BACKUP_DIR+"/"+database+".sql"
                     err_code = self.backup_db(database,DB_BACKUP_DIR)
                     if err_code == 0:
                         self.cursor.execute("DROP DATABASE `"+database+"`")
