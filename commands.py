@@ -105,6 +105,25 @@ class DisableDb(argparse.Action):
             else: 
                 print "database "+database+" not found"
 
+class Reports(argparse.Action):
+
+    def __init__(self,option_strings,dest,
+                    nargs=None,const=None,
+                    default=None,type=None,
+                    choices=None,required=False,
+                    help=None,metavar=None):
+        argparse.Action.__init__(self,
+                                option_strings=option_strings,
+                                dest=dest,nargs=nargs,const=const,
+                                default=default,type=type,choices=choices,
+                                required=required,help=help,metavar=metavar)
+        db = getcon()
+        self.cursor = db.cursor(cursorclass=Queries)
+
+    def __call__(self,parser,namespace,values,option_string=None):
+        for value in values:
+            print value
+
 def add_args():
 
     parser = argparse.ArgumentParser(description='This is a utility tool for MySQL. It can generate reports as well as perform specific actions on the server.')
@@ -118,7 +137,7 @@ def add_args():
                                     help="One or more MySQL databases to drop and backup")
 
     parser_reports = subparsers.add_parser('reports', help="Generate reports about MySQL server")
-    parser_reports.add_argument('--all-empty', nargs=1)
+    parser_reports.add_argument('reports', nargs="+",action=Reports,help="Generates a one or more reports about MySQL server")
 
     return parser
 
