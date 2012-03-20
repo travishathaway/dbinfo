@@ -19,11 +19,12 @@ class DisableUser(argparse.Action):
                                 dest=dest,nargs=nargs,const=const,
                                 default=default,type=type,choices=choices,
                                 required=required,help=help,metavar=metavar)
-        db = getcon()
-        self.cursor = db.cursor(cursorclass=Queries)
 
 
     def __call__(self, parser, namespace, values, option_string=None):
+        db = getcon()
+        self.cursor = db.cursor(cursorclass=Queries)
+        
         print "Using: "+CONFIG.get('host')
         self.cursor.execute('USE mysql')
 
@@ -67,10 +68,10 @@ class DisableDb(argparse.Action):
                                 dest=dest,nargs=nargs,const=const,
                                 default=default,type=type,choices=choices,
                                 required=required,help=help,metavar=metavar)
-        db = getcon()
-        self.cursor = db.cursor(cursorclass=Queries)
 
     def __call__(self,parser,namespace,values,option_string=None):
+        db = getcon()
+        self.cursor = db.cursor(cursorclass=Queries)
         print "Using: "+CONFIG.get('host')
         self.drop_db(values)
 
@@ -118,10 +119,10 @@ class Reports(argparse.Action):
                                 dest=dest,nargs=nargs,const=const,
                                 default=default,type=type,choices=choices,
                                 required=required,help=help,metavar=metavar)
-        db = getcon()
-        self.cursor = db.cursor(cursorclass=Queries)
 
     def __call__(self,parser,namespace,values,option_string=None):
+        db = getcon()
+        self.cursor = db.cursor(cursorclass=Queries)
         for value in values:
             print value
 
