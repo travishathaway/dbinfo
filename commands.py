@@ -24,7 +24,7 @@ class DisableUser(argparse.Action):
 
 
     def __call__(self, parser, namespace, values, option_string=None):
-
+        print "Using: "+CONFIG.get('host')
         self.cursor.execute('USE mysql')
 
         for user in values:
@@ -71,6 +71,7 @@ class DisableDb(argparse.Action):
         self.cursor = db.cursor(cursorclass=Queries)
 
     def __call__(self,parser,namespace,values,option_string=None):
+        print "Using: "+CONFIG.get('host')
         self.drop_db(values)
 
     def backup_db(self,database,backup_dir):
