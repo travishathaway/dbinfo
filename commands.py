@@ -14,11 +14,11 @@ class DisableUser(argparse.Action):
                     default=None,type=None,
                     choices=None,required=False,
                     help=None,metavar=None):
-        argparse.Action.__init__(self,
-                                option_strings=option_strings,
-                                dest=dest,nargs=nargs,const=const,
-                                default=default,type=type,choices=choices,
-                                required=required,help=help,metavar=metavar)
+        super(DisableUser,self).__init__(
+                                option_strings,
+                                dest,nargs,const,
+                                default,type,choices,
+                                required,help,metavar)
 
 
     def __call__(self, parser, namespace, values, option_string=None):
@@ -63,11 +63,11 @@ class DisableDb(argparse.Action):
                     default=None,type=None,
                     choices=None,required=False,
                     help=None,metavar=None):
-        argparse.Action.__init__(self,
-                                option_strings=option_strings,
-                                dest=dest,nargs=nargs,const=const,
-                                default=default,type=type,choices=choices,
-                                required=required,help=help,metavar=metavar)
+        super(DisableDb,self).__init__(
+                                option_strings,
+                                dest,nargs,const,
+                                default,type,choices,
+                                required,help,metavar)
 
     def __call__(self,parser,namespace,values,option_string=None):
         db = getcon()
@@ -79,13 +79,19 @@ class DisableDb(argparse.Action):
         '''
         Function that backs up a mysql database (wrapper around `mysqldump`)
         '''
+        err_code = int
         try:
             args = ['mysqldump',database,'--user='+CONFIG['user'],'--host='+CONFIG['host'],'-p'+CONFIG['pass']]
         except KeyError:
             print "One or more settings were not in settings file. exiting..."
             sys.exit(1)
-        backup_sql = open(backup_dir+'/'+database+'.sql', 'w')
-        return subprocess.call(args,stdout=backup_sql)
+        try:
+            with open(backup_dir+'/'+database+'.sql', 'w') as backup_sql:
+                err_code = subprocess.call(args,stdout=backup_sql)
+        except IOError:
+            print backup_dir, ': does not exist'
+            err_code = 1
+        return err_code
 
     def drop_db(self,databases):
         '''
@@ -114,11 +120,11 @@ class Reports(argparse.Action):
                     default=None,type=None,
                     choices=None,required=False,
                     help=None,metavar=None):
-        argparse.Action.__init__(self,
-                                option_strings=option_strings,
-                                dest=dest,nargs=nargs,const=const,
-                                default=default,type=type,choices=choices,
-                                required=required,help=help,metavar=metavar)
+        super(Reports,self).__init__(
+                                option_strings,
+                                dest,nargs,const,
+                                default,type,choices,
+                                required,help,metavar)
 
     def __call__(self,parser,namespace,values,option_string=None):
         db = getcon()
@@ -133,6 +139,9 @@ def add_args():
 
     parser_disable_user = subparsers.add_parser('disable_user', help="One or more MySQL user accounts to disable.")
     parser_disable_user.add_argument('users',nargs="+",action=DisableUser)
+
+    parser_disable_user = subparsers.add_parser('create_user', help="One or more MySQL user accounts to disable.")
+    parser_disable_user.add_argument('users',nargs="+",action=CreateUser)
 
     parser_disable_db = subparsers.add_parser('disable_db', help="One or more databases to back up and delete.")
     parser_disable_db.add_argument('databases', nargs="+",action=DisableDb,
