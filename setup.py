@@ -1,5 +1,5 @@
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 version = '0.1'
 
@@ -22,8 +22,7 @@ setup(
     long_description=long_description,
     author='Travis Hathaway',
     author_email='travis.j.hathaway@gmail.com',
-    packages=find_packages('dbinfo'),
-    package_dir={'': 'dbinfo'},
+    packages=['dbinfo', ],
     install_requires=['setuptools', 'pymysql', 'psycopg2', 'docopt'],
     entry_points="""
 [console_scripts]
