@@ -1,4 +1,0 @@
-setuptools
-pymysql
-psycopg2
-docopt
