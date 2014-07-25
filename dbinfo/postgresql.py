@@ -50,4 +50,5 @@ class DbinfoPostgresql(Dbinfo):
             '''
         )
 
-        getattr(self, '_format_%s' % output_format)(report_name='usage')
+        getattr(self, '_format_%s' % output_format)(
+            report_name='usage', headers=['Database', 'Size in MB'])

@@ -35,12 +35,18 @@ def main():
     db_settings = load_config()
 
     if args['--dbms'] == 'mysql':
-        from dbinfo.mysql import DbinfoMysql
+        from .mysql import DbinfoMysql
         dbinfo = DbinfoMysql(db_settings['mysql'])
 
     elif args['--dbms'] == 'postgresql':
-        from dbinfo.mysql import DbinfoPostgresql
+        from .postgresql import DbinfoPostgresql
         dbinfo = DbinfoPostgresql(db_settings['postgresql'])
+
+    else:
+        sys.stdout.write(
+            'Unrecognized DBMS "%s"\n' % args['--dbms']
+        )
+        sys.exit(1)
 
     try:
         getattr(dbinfo, args['<report>'])(output_format=args['--format'])
