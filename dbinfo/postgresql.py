@@ -6,7 +6,16 @@ from .base import Dbinfo
 
 class DbinfoPostgresql(Dbinfo):
 
+    '''
+    PostgreSQL implementation of Dbinfo.  Class methods represent report types.
+    '''
+
     def __init__(self, config):
+        '''
+        Using config, attempt to create a database connection and store the
+        cursor on self.
+        '''
+
         try:
             conn = psycopg2.connect(
                 host=config['host'],
@@ -23,7 +32,11 @@ class DbinfoPostgresql(Dbinfo):
             )
             sys.exit(1)
 
-    def usage(self, output_format='csv'):
+    def disk_usage(self, output_format='csv'):
+        '''
+        Disk usage per database
+        '''
+
         self.cur.execute(
             '''
             SELECT

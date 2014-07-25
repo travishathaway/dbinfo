@@ -3,9 +3,19 @@ import sys
 
 from .base import Dbinfo
 
+
 class DbinfoMysql(Dbinfo):
 
+    '''
+    MySQL implementation of Dbinfo.  Class methods represent report types.
+    '''
+
     def __init__(self, config):
+        '''
+        Using config, attempt to create a database connection and store the
+        cursor on self.
+        '''
+
         try:
             conn = pymysql.connect(
                 host=config['host'],
@@ -22,7 +32,11 @@ class DbinfoMysql(Dbinfo):
             )
             sys.exit(1)
 
-    def usage(self, output_format='csv'):
+    def disk_usage(self, output_format='csv'):
+        '''
+        Disk usage per database
+        '''
+
         self.cur.execute('USE information_schema')
         self.cur.execute('''
             SELECT table_schema 'database',
