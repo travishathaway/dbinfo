@@ -1,0 +1,9 @@
+[mysql]
+user = 
+pass = 
+host = 
+
+[postgresql]
+user = 
+pass = 
+host = 

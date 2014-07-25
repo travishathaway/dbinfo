@@ -1,0 +1,16 @@
+Metadata-Version: 1.1
+Name: dbinfo
+Version: 0.1
+Summary: Command line tool for running usage     statistic reports on MySQL or PostgreSQL
+Home-page: http://github.com/travishathaway
+Author: Travis Hathaway
+Author-email: travis.j.hathaway@gmail.com
+License: BSD
+Description: Command line tool for running usage     statistic reports on MySQL or PostgreSQL
+Platform: UNKNOWN
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Programming Language :: Python
+Classifier: Topic :: Software Development :: Bug Tracking

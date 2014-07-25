@@ -1,0 +1,7 @@
+setup.py
+dbinfo/dbinfo.egg-info/PKG-INFO
+dbinfo/dbinfo.egg-info/SOURCES.txt
+dbinfo/dbinfo.egg-info/dependency_links.txt
+dbinfo/dbinfo.egg-info/entry_points.txt
+dbinfo/dbinfo.egg-info/requires.txt
+dbinfo/dbinfo.egg-info/top_level.txt
