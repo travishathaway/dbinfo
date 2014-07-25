@@ -3,14 +3,14 @@ Databases: Tools to help
 
 Requirements
 ------------
--pymysql
--psycopg2
--docopt
+- pymysql
+- psycopg2
+- docopt
 
 Installation
 ------------
--Run `python setup.py install`. Best to do it in a virtualenv.
--Create a `~/.dbinfo_config` using the `dbinfo_config.template` and fill it in with your database connection settings
+- Run `python setup.py install`. Best to do it in a virtualenv.
+- Create a `~/.dbinfo_config` using the `dbinfo_config.template` and fill it in with your database connection settings
 
 What does this do?
 ------------------
