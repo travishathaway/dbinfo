@@ -1,4 +1,4 @@
-Databases: Tools to help
+dbinfo
 ========================
 
 Requirements
