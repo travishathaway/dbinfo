@@ -43,10 +43,7 @@ class DbinfoPostgresql(Dbinfo):
             '''
             SELECT
                 datname,
-                round(
-                    pg_database_size(datname)/1024.0/1024.0,
-                    2
-                )AS size_in_mb
+                pg_size_pretty(pg_database_size(datname)) AS size
             FROM pg_database
             WHERE datistemplate =false;
             '''
