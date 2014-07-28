@@ -10,11 +10,13 @@ class DbinfoPostgresql(Dbinfo):
     PostgreSQL implementation of Dbinfo.  Class methods represent report types.
     '''
 
-    def __init__(self, config):
+    def __init__(self, config, outfile=None):
         '''
         Using config, attempt to create a database connection and store the
         cursor on self.
         '''
+
+        self.outfile = outfile
 
         try:
             conn = psycopg2.connect(
@@ -51,4 +53,24 @@ class DbinfoPostgresql(Dbinfo):
         )
 
         getattr(self, '_format_%s' % output_format)(
-            report_name='usage', headers=['Database', 'Size in MB'])
+            headers=['Database', 'Size in MB'])
+
+    def users(self, output_format='csv'):
+
+        self.cur.execute(
+            '''
+            SELECT u.usename AS "User name",
+            CASE WHEN u.usesuper AND u.usecreatedb THEN CAST('superuser, create
+            database' AS pg_catalog.text)
+                WHEN u.usesuper THEN CAST('superuser' AS pg_catalog.text)
+                WHEN u.usecreatedb THEN CAST('create database' AS
+            pg_catalog.text)
+                ELSE CAST('' AS pg_catalog.text)
+            END AS "Attributes"
+            FROM pg_catalog.pg_user u
+            ORDER BY 1;
+            '''
+        )
+
+        getattr(self, '_format_%s' % output_format)(
+            headers=['User', 'Attributes'])

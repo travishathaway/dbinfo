@@ -1,12 +1,13 @@
 #! /usr/bin/env python
 '''
 Usage:
-    dbinfo <report> [-d <dbms> -f <format>]
+    dbinfo <report> [-d <dbms> -f <format> -o <outfile>]
 
 Options:
     -h --help  Show this screen.
     -d <dbms>, --dbms <dbms>  Database Engine [default: mysql]
     -f <format>, --format <format>  Database Engine [default: csv]
+    -o <outfile>, --outfile <outfile>  Output filename
 '''
 import ConfigParser
 import os
@@ -31,16 +32,18 @@ def load_config():
 
 
 def main():
-    args = docopt(__doc__, version='CV/Resume Send 0.1')
+    args = docopt(__doc__, version='dbinfo 0.1')
     db_settings = load_config()
 
     if args['--dbms'] == 'mysql':
         from .mysql import DbinfoMysql
-        dbinfo = DbinfoMysql(db_settings['mysql'])
+        dbinfo = DbinfoMysql(db_settings['mysql'],
+                             outfile=args.get('--outfile'))
 
     elif args['--dbms'] == 'postgresql':
         from .postgresql import DbinfoPostgresql
-        dbinfo = DbinfoPostgresql(db_settings['postgresql'])
+        dbinfo = DbinfoPostgresql(db_settings['postgresql'],
+                                  outfile=args.get('--outfile'))
 
     else:
         sys.stdout.write(

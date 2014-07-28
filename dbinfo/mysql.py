@@ -10,11 +10,13 @@ class DbinfoMysql(Dbinfo):
     MySQL implementation of Dbinfo.  Class methods represent report types.
     '''
 
-    def __init__(self, config):
+    def __init__(self, config, outfile=None):
         '''
         Using config, attempt to create a database connection and store the
         cursor on self.
         '''
+
+        self.outfile = outfile
 
         try:
             conn = pymysql.connect(
@@ -48,4 +50,16 @@ class DbinfoMysql(Dbinfo):
         ''')
 
         getattr(self, '_format_%s' % output_format)(
-            report_name='usage', headers=['Database', 'Size in MB'])
+            headers=['Database', 'Size in MB'])
+
+    def users(self, output_format='csv'):
+        self.cur.execute(
+            'SELECT user, host, db, select_priv, insert_priv, grant_priv \
+            FROM mysql.db'
+        )
+
+        getattr(self, '_format_%s' % output_format)(
+            headers=[
+                'user', 'host', 'db', 'select_priv',
+                'insert_priv', 'grant_priv']
+        )
